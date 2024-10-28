@@ -1,14 +1,25 @@
-version: '3.9'
 services:
   satisfactory-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - TZ=${TZ:-UTC}
+        - PUID=${PUID:-1000}
+        - PGID=${PGID:-1000}
     image: 'satisfactory-arm64'
     container_name: 'satisfactory-server'
     ports:
-      - '7777:7777/udp'
-      - '7777:7777/tcp'
+      - '${SERVER_PORT:-7777}:7777/udp'
+      - '${SERVER_PORT:-7777}:7777/tcp'
     restart: 'unless-stopped'
     environment:
-      - EXTRA_PARAMS=-log -unattended -ini:Engine:[HTTPServer.Listeners]:DefaultBindAddress=any
+      - ALWAYS_UPDATE_ON_START=${ALWAYS_UPDATE_ON_START:-false}
+      - MAX_PLAYERS=${MAX_PLAYERS:-4}
+      - MNUM_ROTATING_AUTO_SAVES=${MNUM_ROTATING_AUTO_SAVES:-5}
+      - LOG_NET_LEVEL=${LOG_NET_LEVEL:-Error}
+      - LOG_NET_TRAFFIC_LEVEL=${LOG_NET_TRAFFIC_LEVEL:-Warning}
+      - EXTRA_PARAMS=${EXTRA_PARAMS}
     volumes:
       - './satisfactory:/satisfactory'
       - './config:/home/steam/.config/Epic'

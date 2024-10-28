@@ -35,8 +35,17 @@ function main() {
   # Go to /satisfactory
   cd /satisfactory
 
+  # set arguments
+  args=(
+    "-ini:Engine:[Core.Log]:LogNet=$LOG_NET_LEVEL"
+    "-ini:Engine:[Core.Log]:LogNetTraffic=$LOG_NET_TRAFFIC_LEVEL"
+    "-ini:Engine:[/Script/FactoryGame.FGSaveSession]:mNumRotatingAutosaves=$MNUM_ROTATING_AUTO_SAVES"
+    "-ini:Game:[/Script/Engine.GameSession]:MaxPlayers=$MAX_PLAYERS"
+    "-ini:GameUserSettings:[/Script/Engine.GameSession]:MaxPlayers=$MAX_PLAYERS"
+  )
+
   # Start server
-  FEXBash "./FactoryServer.sh $EXTRA_PARAMS"
+  FEXBash "./FactoryServer.sh "${args[@]}" $EXTRA_PARAMS"
 }
 
 main
